@@ -11,7 +11,9 @@ If team A beats team C, and in turn C beats B, both by a wide margin, it is natu
 In this squash league, there are 6 possible outcomes: 0-5, 1-4, 2-3, 3-2, 4-1 and 5-0. If A > C by 4 points to 1, then we map this to (an arbitrarily chosen probability) 74% through the function 
 ```score2prob(s) = s*0.8/5+0.1.```
 This means that we expect A > C in the future with a probability of p=74%. Now suppose that C > B by 3-2, so that q=58%. Then assuming transitivity, the probability that A > B is
+
 ```Q = pq/(pq+(1-p)(1-q)),```
+
 In other words, `Q` is the probability that A > C and B > C over the probability that A < C and B < C. If, hypothetically speaking, A = C and C = B (drawn) and so p=q=0.5, then we have Q=0.5 since we have no information.
 
 The division table is essentially a lower triangular matrix and can be viewed as a graph. Suppose that we want to predict the score of A versus B. Then we need to find all acyclic paths `P_1, P_2,....,P_N` from A to B in this graph, ex. A->D->C->B, where A already played against D, and same goes for DvC and CvB. The above procedure is iteratively applied to produce the probabilities `Q_1, Q_2, ..., Q_N`. The average of these probabilities is taken to produce `Q`: our supposed probability that A > B.
@@ -20,6 +22,7 @@ Finally this probability `Q` is mapped back to a score by applying the inverse t
 
 ## Example
 At the time of writing, the Division 6 is as follows, with blanks meaning that the games are unlpayed yet.
+
 |          | Dylan | Miguel | James | Denis | Chris | Julio | Nick | Genovese | SCORES |
 |----------|:-----:|:------:|:-----:|:-----:|-------|-------|------|----------|--------|
 |   Dylan  | -   | 1-4    |    | 3-2   | 4-1   | 3-2   | 3-2  |       | 23     |
@@ -30,7 +33,9 @@ At the time of writing, the Division 6 is as follows, with blanks meaning that t
 | Julio    | 2-3   | 3-2    |    |    |    | -   |   |       | 8      |
 | Nick     | 2-3   |     |    |    |    |    | -  |       | 3      |
 | Vito |    |     |    |    |    |    |   | -      | 0      |
+
 Running the script, one will see that the final rpedicting standings along with the results is as follows
+
 | |James    | Miguel | Dylan | Julio | Denis | Genovese | Nick | Chris | SCORES |      
 |----------|:------:|:-----:|:-----:|:-----:|----------|------|-------|--------|------|
 |   James  | -   | 4-1   | 4-1   | 4-1   | 4-1      | 2.5-2.5  | 4-1   | 4-1    | 39.5 |
@@ -41,8 +46,11 @@ Running the script, one will see that the final rpedicting standings along with 
 | Vito | 2.5-2.5    | 2.5-2.5   | 2.5-2.5   | 2.5-2.5   | 2.5-2.5      | - | 2.5-2.5   | 2.5-2.5    | 24.5 |
 | Nick     | 1-4    | 2-3   | 2-3   | 2-3   | 2-3      | 2.5-2.5  | -  | 3-3    | 22.5 |
 | Chris    | 1-4    | 2-3   | 1-4   | 2-3   | 2-3      | 2.5-2.5  | 2-3   | -   | 19.5 |
+
 Some things to note, if there are no possible paths from player A to player B, then 2.5 points are awarded for each player, and the extra point for winning is split up between each player. Since Vito has not played against anyone yet, there is no information to indicate whether or not they will win any games against anyone.
 
-Although Dylan has won 4 out of the 5 games, he is still not forecast to win the division. This is because James, although played fewer games, beat both of his games. Particularly his 4-1 defeat against Miguel strongly suggests that James > Dylan. This is because we have James > Miguel > Dylan in previous games.
+Although Dylan has won 4 out of the 5 games, he is still not forecast to win the division. This is because James, although played fewer games, beat both of his games. Particularly his 4-1 defeat against Miguel strongly suggests that James > Dylan. This is because we have 
 
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+```James > Miguel > Dylan```
+
+in previous games.
